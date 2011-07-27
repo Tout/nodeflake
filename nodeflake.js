@@ -17,7 +17,7 @@ LOG.info('     Worker Id:' + config.workerId);
 
 //Local variables
 var redis_client = redis.createClient(),
-    worker = idworker.getIdWorker(config.workerId, config.dataCenterId, redis_client);
+    worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 
 //Listen for connections
 http.createServer(function (req, res) {
