@@ -15,10 +15,10 @@ Because it was there.
 Goals
 -----
 
-Generate unique ids without need for a stored seed.
-Ids should be mostly sortable by time/order
-2k ids per second (one fifth of SnowFlake!)
-Fast response and high availability (numbers laters)
+  -Generate unique ids without need for a stored seed.
+  -Ids should be mostly sortable by time/order
+  -2k ids per second (one fifth of SnowFlake!)
+  -Fast response and high availability (numbers laters)
 
 
 State Right Now
