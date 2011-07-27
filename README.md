@@ -1,7 +1,7 @@
 NodeFlake
 =========
 
-Like twitters SnowFlake, but made with NodeJS. 
+Like twitters [SnowFlake](https://github.com/twitter/snowflake), but made with NodeJS. 
 
 
 
