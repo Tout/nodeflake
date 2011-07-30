@@ -1,11 +1,12 @@
 //Load Config
 var config = require("./config.js");
+
+//LOGging
 var LOG = require("./lib/utils/log.js");
 
 
 //Load dependencies
 var http = require('http'),
-    redis = require('redis'),
     idworker = require("./lib/idworker.js");
 
 

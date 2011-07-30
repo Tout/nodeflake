@@ -32,7 +32,7 @@ Also, I need to make it more "node-like" with an actual event model.
 Whats Next
 ----------
 
-Introduce socket connection for cross-service ID delivery. Fix issues. Implement redis for better uniqueness as well as tracking/logging. Finish the port from what twitter is doing. 
+Introduce socket connection for cross-service ID delivery. Fix issues. Finish the port from what twitter is doing.
 
 
 
