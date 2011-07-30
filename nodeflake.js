@@ -10,7 +10,7 @@ var http = require('http'),
 
 
 //Startup Info
-LOG.info('NodeFlake Server running at http://localhost:1337/');
+LOG.info('NodeFlake Server running on port ' + config.port);
 LOG.info('Data Center Id:' + config.dataCenterId);
 LOG.info('     Worker Id:' + config.workerId);
 
@@ -25,7 +25,6 @@ http.createServer(function (req, res) {
       res.writeHead(200, {'Content-Type': 'application/json'});
       if (!err) {
         var nextId = worker.getId(req.headers['user-agent']);
-        LOG.info(nextId);
         res.end("{\"id\":\"" + nextId + "\"}\n");
       } else {
         LOG.error("Failed to return id");
@@ -33,5 +32,5 @@ http.createServer(function (req, res) {
       }
 
   });
-}).listen(1337);
+}).listen(config.port);
 
