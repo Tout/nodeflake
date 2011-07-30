@@ -1,6 +1,6 @@
 //NodeFlake config
 var config = {
-    port : 1337,
+    port : 80,
     dataCenterId : 1,
     workerId : 1
 };
