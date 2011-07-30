@@ -17,21 +17,17 @@ LOG.info('     Worker Id:' + config.workerId);
 
 
 //Local variables
-var redis_client = redis.createClient(),
-    worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
+var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 
 //Listen for connections
 http.createServer(function (req, res) {
-  redis_client.incr("nextid", function(err, value) {
-      res.writeHead(200, {'Content-Type': 'application/json'});
-      if (!err) {
-        var nextId = worker.getId(req.headers['user-agent']);
-        res.end("{\"id\":\"" + nextId + "\"}\n");
-      } else {
-        LOG.error("Failed to return id");
-        res.end("{\"err\":" + err + "}\n");
-      }
-
-  });
+  res.writeHead(200, {'Content-Type': 'application/json'});
+  try {
+    var nextId = worker.getId(req.headers['user-agent']);
+    res.end("{\"id\":\"" + nextId + "\"}\n");
+  } catch(err) {
+    LOG.error("Failed to return id");
+    res.end("{\"err\":" + err + "}\n");
+  }
 }).listen(config.port);
 
