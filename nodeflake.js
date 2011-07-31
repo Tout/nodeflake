@@ -18,6 +18,8 @@ var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 
 //Listen for socket connections and respond
 var io = require("socket.io").listen(config.port);
+LOG.info("Socket set up");
+
 io.sockets.on('connection', function (socket) {
     try {
         //TODO can you get the UA from sockets?
