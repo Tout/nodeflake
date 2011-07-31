@@ -17,8 +17,9 @@ LOG.info('     Worker Id:' + config.workerId);
 var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 
 //Listen for socket connections and respond
-var io = require("socket.io").listen(config.port);
-LOG.info("Socket set up");
+var io = require("socket.io");
+LOG.info("Socket set up, version " + io.version);
+io.listen(config.port);
 
 io.sockets.on('connection', function (socket) {
     try {
