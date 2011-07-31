@@ -17,10 +17,10 @@ LOG.info('     Worker Id:' + config.workerId);
 var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 
 //Listen for socket connections and respond
-var io = require("socket.io");
+
 LOG.info("Socket set up, version " + io.version);
 try {
-    io.listen(config.port, {'try multiple transports': true});
+    var io = require("socket.io").listen(config.port);
 } catch (err) {
     LOG.error("Could not start socket listener.", err);
     process.exit(1);
