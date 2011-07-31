@@ -19,7 +19,12 @@ var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 //Listen for socket connections and respond
 var io = require("socket.io");
 LOG.info("Socket set up, version " + io.version);
-io.listen(config.port);
+try {
+    io.listen(config.port);
+} catch (err) {
+    LOG.error(err);
+    process.stop();
+}
 
 io.sockets.on('connection', function (socket) {
     try {
