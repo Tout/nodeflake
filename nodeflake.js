@@ -23,6 +23,7 @@ try {
     io.listen(config.port);
 } catch (err) {
     LOG.error("Could not start socket listener.", err);
+    process.exit(1);
 }
 
 io.sockets.on('connection', function (socket) {
