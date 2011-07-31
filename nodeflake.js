@@ -22,8 +22,7 @@ LOG.info("Socket set up, version " + io.version);
 try {
     io.listen(config.port);
 } catch (err) {
-    LOG.error(err);
-    process.stop();
+    LOG.error("Could not start socket listener.", err);
 }
 
 io.sockets.on('connection', function (socket) {
