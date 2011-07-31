@@ -20,7 +20,7 @@ var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 var io = require("socket.io");
 LOG.info("Socket set up, version " + io.version);
 try {
-    io.listen(config.port);
+    io.listen(config.port, {'try multiple transports': true});
 } catch (err) {
     LOG.error("Could not start socket listener.", err);
     process.exit(1);
