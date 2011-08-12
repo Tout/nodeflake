@@ -42,7 +42,11 @@ if(config.useSockets) {
     }
 } else {
     http.createServer(function (req, res) {
-        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.writeHead(200, {
+                            'Content-Type' : 'application/json',
+                            'Cache-Control': 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0',
+                            'Connection'   : 'close'
+                      });
         var urlObj = url.parse(req.url, true);
         function wrappedResponse(responseString) {
             if (urlObj.query["callback"]) {
