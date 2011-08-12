@@ -7,6 +7,7 @@ var LOG = require("./lib/utils/log.js");
 
 //Load dependencies
 var http = require("http"),
+    url = require("url"),
     idworker = require("./lib/idworker.js");
 
 //Startup Info
@@ -42,12 +43,20 @@ if(config.useSockets) {
 } else {
     http.createServer(function (req, res) {
         res.writeHead(200, {'Content-Type': 'application/json'});
+        var urlObj = url.parse(req.url, true);
+        function wrappedResponse(responseString) {
+            if (urlObj.query["callback"]) {
+                return urlObj.query["callback"] + "(" + responseString + ");";
+            } else {
+                return responseString;
+            }
+        }
         try {
             var nextId = worker.getId(req.headers['user-agent']);
-            res.end("{\"id\":\"" + nextId + "\"}\n");
+            res.end(wrappedResponse("{\"id\":\"" + nextId + "\"}"));
         } catch(err) {
             LOG.error("Failed to return id");
-            res.end("{\"err\":" + err + "}\n");
+            res.end(wrappedResponse("{\"err\":" + err + "}"));
         }
     }).listen(config.port);
 }
