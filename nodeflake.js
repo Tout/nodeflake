@@ -49,7 +49,7 @@ if(config.useSockets) {
         } else {
             res.writeHead(200, {
                                 'Content-Type' : 'application/json',
-                                'Cache-Control': 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0',
+                                'Cache-Control': 'no-cache',
                                 'Connection'   : 'close'
                           });
             function wrappedResponse(responseString) {
