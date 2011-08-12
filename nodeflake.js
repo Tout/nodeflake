@@ -48,7 +48,7 @@ if(config.useSockets) {
             res.end("Not Found");
         } else {
             res.writeHead(200, {
-                                'Content-Type' : 'application/json',
+                                'Content-Type' : 'text/javascript',
                                 'Cache-Control': 'no-cache',
                                 'Connection'   : 'close'
                           });
