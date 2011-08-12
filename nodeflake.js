@@ -42,25 +42,30 @@ if(config.useSockets) {
     }
 } else {
     http.createServer(function (req, res) {
-        res.writeHead(200, {
-                            'Content-Type' : 'application/json',
-                            'Cache-Control': 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0',
-                            'Connection'   : 'close'
-                      });
         var urlObj = url.parse(req.url, true);
-        function wrappedResponse(responseString) {
-            if (urlObj.query["callback"]) {
-                return urlObj.query["callback"] + "(" + responseString + ");";
-            } else {
-                return responseString;
+        if (req.url.indexOf("favicon") > -1) {
+            res.writeHead(404, {'Content-Type':'text/plain'});
+            res.end("Not Found");
+        } else {
+            res.writeHead(200, {
+                                'Content-Type' : 'application/json',
+                                'Cache-Control': 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0',
+                                'Connection'   : 'close'
+                          });
+            function wrappedResponse(responseString) {
+                if (urlObj.query["callback"]) {
+                    return urlObj.query["callback"] + "(" + responseString + ");";
+                } else {
+                    return responseString;
+                }
             }
-        }
-        try {
-            var nextId = worker.getId(req.headers['user-agent']);
-            res.end(wrappedResponse("{\"id\":\"" + nextId + "\"}"));
-        } catch(err) {
-            LOG.error("Failed to return id");
-            res.end(wrappedResponse("{\"err\":" + err + "}"));
+            try {
+                var nextId = worker.getId(req.headers['user-agent']);
+                res.end(wrappedResponse("{\"id\":\"" + nextId + "\"}"));
+            } catch(err) {
+                LOG.error("Failed to return id");
+                res.end(wrappedResponse("{\"err\":" + err + "}"));
+            }
         }
     }).listen(config.port);
 }
