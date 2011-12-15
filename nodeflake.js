@@ -4,25 +4,30 @@ var config = require("./config.js");
 //LOGging
 var LOG = require("./lib/utils/log.js");
 
-
+var net = require('net');
 //Load dependencies
 var http = require("http"),
     url = require("url"),
     idworker = require("./lib/idworker.js");
 
 //Startup Info
-LOG.info('NodeFlake Server running on port ' + config.port);
+if(config.sockFile != '') {
+  LOG.info('NodeFlake Server running on UNIX socket ' + config.sockFile);
+} else if(config.tcpSockets) {
+  LOG.info('NodeFlake Server running on TCP port ' + config.port);
+} else {
+  LOG.info('NodeFlake Server running http on port ' + config.port);
+}
 LOG.info('Data Center Id:' + config.dataCenterId);
 LOG.info('     Worker Id:' + config.workerId);
 
 //Local variables
 var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 
-if(config.useSockets) {
+if(config.sockFile != '') {
     //Listen for socket connections and respond
     try {
-        var net = require('net')
-        var server = net.createServer('/tmp/nodeflake.sock', function(c) {
+        var server = net.createServer(config.sockFile, function(c) {
           try {
               //TODO can you get the UA from sockets?
               var nextId = worker.getId("unix socket");
@@ -40,6 +45,8 @@ if(config.useSockets) {
         LOG.error("Could not start socket server.", err);
         process.exit(1);
     }
+} else if(config.tcpSockets) {
+  var server = net.createServer()
 } else {
     http.createServer(function (req, res) {
         var urlObj = url.parse(req.url, true);
