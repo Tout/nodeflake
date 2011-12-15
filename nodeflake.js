@@ -21,23 +21,23 @@ var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
 if(config.useSockets) {
     //Listen for socket connections and respond
     try {
-        var io = require("socket.io").listen(config.port);
-        LOG.info("Socket set up, version " + io.version);
-
-        io.sockets.on('connection', function (socket) {
-            try {
-                //TODO can you get the UA from sockets?
-                var nextId = worker.getId("socket.io web socket");
-                socket.emit('response', {id:nextId})
-            } catch(err) {
-                LOG.error("Failed to return id");
-                socket.emit('response', {error:err});
-            } finally {
-                socket.disconnect();
-            }
+        var net = require('net')
+        var server = net.createServer('/tmp/nodeflake.sock', function(c) {
+          try {
+              //TODO can you get the UA from sockets?
+              var nextId = worker.getId("unix socket");
+              c.write("{id:" + nextId + "}")
+          } catch(err) {
+              LOG.error("Failed to return id");
+              c.write("{error:" + err + "}");
+              server.close();
+          }
+        });
+        server.listen('/tmp/nodeflake.sock', function() {
+          console.log('server bound');
         });
     } catch (err) {
-        LOG.error("Could not start socket listener.", err);
+        LOG.error("Could not start socket server.", err);
         process.exit(1);
     }
 } else {
