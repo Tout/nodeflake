@@ -34,7 +34,7 @@ if(config.sockFile != '') {
               c.write("{id:" + nextId + "}")
           } catch(err) {
               LOG.error("Failed to return id");
-              c.write("{error:" + err + "}");
+              c.write("'" + nextId + "'");
               server.close();
           }
         });
