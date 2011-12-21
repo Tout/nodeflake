@@ -1,13 +1,9 @@
-//Load Config
-var config = require("./config.js");
-
-//LOGging
-var LOG = require("./lib/utils/log.js");
-
-var net = require('net');
-//Load dependencies
-var http = require("http"),
+//Load Dependencies and Config
+var net = require('net'),
+    http = require("http"),
     url = require("url"),
+    config = require("./config.js"),
+    LOG = require("./lib/utils/log.js"),
     idworker = require("./lib/idworker.js");
 
 //Startup Info
