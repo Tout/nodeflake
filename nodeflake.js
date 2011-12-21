@@ -4,7 +4,9 @@ var net = require('net'),
     url = require("url"),
     config = require("./config.js"),
     LOG = require("./lib/utils/log.js"),
-    idworker = require("./lib/idworker.js");
+    idworker = require("./lib/idworker.js"),
+    lastTimestamp = 0,
+    lastSequence = require('bigdecimal').BigInteger('0');
 
 //Startup Info
 if(config.sockFile != '') {
@@ -17,24 +19,32 @@ if(config.sockFile != '') {
 LOG.info('Data Center Id:' + config.dataCenterId);
 LOG.info('     Worker Id:' + config.workerId);
 
-//Local variables
-var worker = idworker.getIdWorker(config.workerId, config.dataCenterId);
-
 if(config.sockFile != '') {
     //Listen for socket connections and respond
     try {
-        var server = net.createServer(config.sockFile, function(c) {
+        var server = net.createServer(config.sockFile, function (c) {
           try {
               //TODO can you get the UA from sockets?
-              var nextId = worker.getId("unix socket");
-              c.write("{id:" + nextId + "}")
+              var nextId = null;
+              idworker.getId(lastTimestamp, lastSequence, function(timestamp, sequence) {
+                  lastTimestamp = timestamp;
+                  lastSequence = sequence;
+              },
+              function (err, nextId) {
+                  if (err) {
+                      c.write('');
+                      server.close();
+                  } else {
+                      c.write("'" + nextId + "'");
+                  }
+              });
           } catch(err) {
               LOG.error("Failed to return id");
               c.write("'" + nextId + "'");
               server.close();
           }
         });
-        server.listen('/tmp/nodeflake.sock', function() {
+        server.listen('/tmp/nodeflake.sock', function () {
           console.log('server bound');
         });
     } catch (err) {
@@ -42,7 +52,40 @@ if(config.sockFile != '') {
         process.exit(1);
     }
 } else if(config.tcpSockets) {
-  var server = net.createServer()
+    try {
+        var server = net.createServer(function(c) { //'connection' listener
+              try {
+                  //TODO can you get the UA from sockets?
+                  var nextId = null;
+                  idworker.getId(lastTimestamp, lastSequence, function(timestamp, sequence) {
+                      lastTimestamp = timestamp;
+                      lastSequence = sequence;
+                  },
+                  function (err, nextId) {
+                      if (err) {
+                          c.write('');
+                          server.close();
+                      } else {
+                          c.write("'" + nextId + "'");
+                      }
+                  });
+              } catch(err) {
+                  LOG.error("Failed to return id");
+                  c.write("'" + nextId + "'");
+                  server.close();
+              }
+              console.log('server connected');
+              c.on('end', function() {
+                  console.log('server disconnected');
+              });
+              c.pipe(c);
+          }).listen(config.port, function () {
+              console.log('server bound');
+          });
+    } catch (err) {
+        LOG.error("Could not start socket server.", err);
+        process.exit(1);
+    }
 } else {
     http.createServer(function (req, res) {
         var urlObj = url.parse(req.url, true);
@@ -63,8 +106,18 @@ if(config.sockFile != '') {
                 }
             }
             try {
-                var nextId = worker.getId(req.headers['user-agent']);
-                res.end(wrappedResponse("{\"id\":\"" + nextId + "\"}"));
+                idworker.getId(lastTimestamp, lastSequence, function (timestamp, sequence) {
+                    lastTimestamp = timestamp;
+                    lastSequence = sequence;
+                },
+                function (err, result) {
+                    if (err) {
+                        LOG.error("Failed to return id");
+                        res.end(wrappedResponse("{\"err\":" + err + "}"));
+                    } else {
+                        res.end(wrappedResponse("{\"id\":\"" + nextId + "\"}"));
+                    }
+                });
             } catch(err) {
                 LOG.error("Failed to return id");
                 res.end(wrappedResponse("{\"err\":" + err + "}"));
