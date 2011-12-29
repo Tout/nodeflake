@@ -14,7 +14,6 @@ suite.addBatch({
                lastSequence = sequence;
            },
            function(err, result) {
-               console.log("result is a " + typeof(result));
                assert.isObject(result);
            });
         },
