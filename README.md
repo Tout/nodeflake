@@ -38,6 +38,22 @@ Whats Next
 
 Introduce socket connection for cross-service ID delivery. Fix issues. Finish the port from what twitter is doing.
 
+Changes in this Fork
+--------------------
 
+Significant structural changes have been made to the code.
 
-
+  - Created a dependency on [bigdecimal](https://github.com/iriscouch/bigdecimal.js) for better large number support.
+  - Added socket connection support, both TCP and UNIX sockets.
+  - Added 2 values to config.js: sockFile and tcpSockets. The type of server created is based on the following:
+      - if sockFile has a value, a unix socket server will be created
+      - if sockFile has no value or isn't in the file, the system looks at the value of tcpSockets, if it is 1, a tcp socket server will be created at the specified port. If tcpSockets is 0, an http server will be created at the specified ports
+  - Added functional unit tests, using [vows](http://vowsjs.org)
+  - Fixed an issue with the system generating duplicate ids.
+  - Reworked the code to increase decoupling and make it more event-driven rather than object oriented.
+  - Changed the response for unix sockets to be a digit instead of a json packet.
+ 
+ 
+Outstanding Issues
+------------------
+At the moment the individual unit tests pass when run individually; however, an error occurs when run simply with the "vows" command. I need to investigate why this is happening. As this is my first use of vows, I'm sure I'm missing something that is basic.
