@@ -14,7 +14,6 @@ var http = require('http'),
         path: '/',
         agent: false
     };
-var response;
 
 suite.addBatch({
     'An http_server': {
@@ -38,7 +37,6 @@ suite.addBatch({
         'requesting a number': {
             topic: function (server) {
                 options.path = '/';
-                console.log('so far so good');
                 http.get(options, this.callback);
             },
             'returns a valid page': function (resp, stat) {
