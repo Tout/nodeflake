@@ -2,7 +2,7 @@ var idworker = require("../lib/idworker.js");
 var worker = idworker.getIdWorker(0, 0);
 var hash = {};
 
-var startTimer = (new Date).getTime();
+var startTimer = (new Date()).getTime();
 
 for (var i = 0; i < 2000; ++i) {
     var id = worker.getId("test agent");
@@ -13,6 +13,6 @@ for (var i = 0; i < 2000; ++i) {
     }
 }
 
-var endTimer = (new Date).getTime();
+var endTimer = (new Date()).getTime();
 
 console.log(endTimer - startTimer, "milliseconds");

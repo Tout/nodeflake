@@ -14,15 +14,16 @@ suite.addBatch({
     'server': {
         topic: server,
         'returns a socket server when specified': function (topic) {
+            'use strict';
             topic.start('socket', 8082, testTimeSource, function (server) {
                 assert.instanceOf(server, net.Server);
             });
         },
         'returns an http server otherwise': function (topic) {
+            'use strict';
             topic.start('http', 8083, testTimeSource, function (server) {
                 assert.instanceOf(server, http.Server);
             });
         }
-        
     }
 }).export(module);

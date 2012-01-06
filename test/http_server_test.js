@@ -18,32 +18,39 @@ var http = require('http'),
 suite.addBatch({
     'An http_server': {
         topic: function () {
+            'use strict';
             httpServer.start(8080, testTimeSource, this.callback);
         },
         'starts up properly': function (err, stat) {
+            'use strict';
             assert.isNull(err);
             assert.instanceOf(stat, http.Server);
         },
         'requesting favicon': {
             topic: function (server) {
+                'use strict';
                 options.path = '/favicon.png';
                 http.get(options, this.callback);
             },
             'returns a 404 when requesting favicon': function (resp, stat) {
+                'use strict';
                 assert.isDefined(resp);
                 assert.equal(resp.statusCode, 404);
             }
         },
         'requesting a number': {
             topic: function (server) {
+                'use strict';
                 options.path = '/';
                 http.get(options, this.callback);
             },
             'returns a valid page': function (resp, stat) {
+                'use strict';
                 assert.isDefined(resp);
                 assert.equal(resp.statusCode, 200);
             },
             'returns the id in the body': function (resp, stat) {
+                'use strict';
                 resp.on('data', function (chunk) {
                     assert.isNotEmpty(chunk);
                     assert.isNumber(JSON.parse(chunk).id);

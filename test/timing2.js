@@ -3,23 +3,24 @@ var idworker = require("../lib/idworker2.js"),
     lastTimestamp = 0,
     lastSequence = biginteger('0'),
     hash = {};
-    
-var startTimer = (new Date).getTime();
+
+var startTimer = (new Date()).getTime();
 
 for (var i = 0; i < 2000; ++i) {
     idworker.getId(lastTimestamp, lastSequence, function (timestamp, sequence) {
-           lastTimestamp = timestamp;
-           lastSequence = sequence;
-       },
-       function(err, result) {
-           if (hash[result.toString()]) {
+        'use_strict';
+        lastTimestamp = timestamp;
+        lastSequence = sequence;
+        },
+        function(err, result) {
+            if (hash[result.toString()]) {
                console.log('**********************AUGH************************');
-           } else {
+            } else {
                hash[result.toString()] = true;
-           }
-       });
+            }
+        });
 }
 
-var endTimer = (new Date).getTime();
+var endTimer = (new Date()).getTime();
 
 console.log(endTimer - startTimer, "milliseconds");
