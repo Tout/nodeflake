@@ -1,6 +1,6 @@
 //NodeFlake config
 var config = {
-    port : parseFloat(process.env.PORT) || 7337,
+    port : 21337,
     dataCenterId : '1',
     workerId : '1',
     tcpSockets : 0,
