@@ -1,8 +1,20 @@
 #!/usr/bin/env node
 
 var haibu = require('haibu'),
-    eyes = require('eyes'),
-    app = require('./package.json');
+    eyes = require('eyes');
+    
+var app = {
+    "user": "kris",
+    "name": "nodeflake",
+    "domain": "tout.com",
+    "repository": {
+      "type": "git",
+      "url": "http://github.com/Tout/nodeflake.git"
+    },
+    "scripts": {
+      "start": "nodeflake.js"
+    }
+};
 
 var client = new haibu.drone.Client({
   host: 'localhost',
