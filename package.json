@@ -1,6 +1,7 @@
 {
   "name": "nodeflake",
   "description": "Unique ID server for No-SQL environments, based on Twitter's SnowFlake",
+  "domain": "tout.com",
   "version": "1.0.0",
   "author": "David LeMieux",
   "contributors": ["Kristine Robison"],
@@ -11,9 +12,13 @@
   "engine": [ "node >=0.6.5" ],
   "dependencies" : {
       "bigdecimal": "~0.6.1",
+      "eyes": "~0.1.7",
   },
   "devDependencies": {
     "vows": "~0.6.1"
   },
+  "scripts": {
+    "start": "nodeflake.js"
+  }
   "main": "./"
 }
