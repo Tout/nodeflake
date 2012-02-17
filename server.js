@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var haibu = require('haibu'),
     eyes = require('eyes'),
     app = require('./package.json');

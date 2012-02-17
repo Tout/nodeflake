@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 //Load Dependencies and Config
 var server = require('./lib/server.js'),
     config = require("./config.js"),
