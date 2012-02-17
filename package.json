@@ -12,10 +12,10 @@
   "engine": [ "node >=0.6.5" ],
   "dependencies" : {
       "bigdecimal": "~0.6.1",
-      "eyes": "~0.1.7",
+      "eyes": "~0.1.7"
   },
   "devDependencies": {
-    "vows": "~0.6.1",
+    "vows": "~0.6.1"
   },
   "scripts": {
     "start": "nodeflake.js"
